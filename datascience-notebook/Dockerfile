@@ -86,11 +86,11 @@ RUN conda install --yes \
 # Install IJulia packages as jovyan and then move the kernelspec out
 # to the system share location. Avoids problems with runtime UID change not 
 # taking effect properly on the .local folder in the jovyan home dir.
-RUN julia -e 'Pkg.add("IJulia")' && \
-    mv /home/$NB_USER/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels/ && \
-    chmod -R go+rx $CONDA_DIR/share/jupyter && \
-    rm -rf /home/$NB_USER/.local/share
-RUN julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")'
+## RUN julia -e 'Pkg.add("IJulia")' && \
+##     mv /home/$NB_USER/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels/ && \
+##     chmod -R go+rx $CONDA_DIR/share/jupyter && \
+##     rm -rf /home/$NB_USER/.local/share
+## RUN julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")'
 
 USER root
 
