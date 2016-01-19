@@ -1,8 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-FROM debian:jessie
+FROM kaixhin/cuda-lasagne:7.0
 
-MAINTAINER Jupyter Project <jupyter@googlegroups.com>
+MAINTAINER Matt Edwards <matted@mit.edu>
 
 USER root
 
