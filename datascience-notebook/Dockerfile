@@ -108,6 +108,10 @@ RUN pip install octave_kernel
 RUN pip install bash_kernel
 RUN pip install scilab_kernel
 
+RUN python -m octave_kernel.install
+RUN python -m bash_kernel.install
+RUN python -m scilab_kernel.install
+
 USER root
 
 # Install Python 2 kernel spec globally to avoid permission problems when NB_UID
