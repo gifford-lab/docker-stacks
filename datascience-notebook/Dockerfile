@@ -6,6 +6,12 @@ MAINTAINER Matt Edwards <matted@mit.edu>
 
 USER root
 
+RUN apt-get update -qq && apt-get install -qqy software-properties-common && \
+    add-apt-repository ppa:marutter/rrutter && \
+    add-apt-repository ppa:staticfloat/juliareleases && \
+    add-apt-repository ppa:staticfloat/julia-deps && \
+    add-apt-repository ppa:octave/stable
+
 # R pre-requisites
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -18,6 +24,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     julia \
     libnettle4 && apt-get clean
+
+# Assorted other dependencies
+RUN apt-get update -qq && apt-get install -qqy \
+    octave \
+    octave-signal \
+    scilab && apt-get clean
 
 USER jovyan
 
@@ -91,6 +103,10 @@ RUN conda install --yes \
 ##     chmod -R go+rx $CONDA_DIR/share/jupyter && \
 ##     rm -rf /home/$NB_USER/.local/share
 ## RUN julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")'
+
+RUN pip install octave_kernel
+RUN pip install bash_kernel
+RUN pip install scilab_kernel
 
 USER root
 
