@@ -37,10 +37,12 @@ USER jovyan
 RUN conda install --yes \
     'ipywidgets=4.0*' \
     'pandas=0.17*' \
+    'pytables=3.2.2*' \
     'matplotlib=1.4*' \
     'scipy=0.16*' \
     'seaborn=0.6*' \
     'scikit-learn=0.16*' \
+    'scikit-image=0.11*' \
     'scikit-image=0.11*' \
     'sympy=0.7*' \
     'cython=0.22*' \
