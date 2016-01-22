@@ -38,7 +38,6 @@ RUN conda install --yes \
     'ipywidgets=4.0*' \
     'pandas=0.17*' \
     'matplotlib=1.4*' \
-    'pytables=3.2.2*' \
     'scipy=0.16*' \
     'seaborn=0.6*' \
     'scikit-learn=0.16*' \
@@ -62,6 +61,7 @@ RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     'scipy=0.16*' \
     'seaborn=0.6*' \
     'scikit-learn=0.16*' \
+    'pytables=3.2.2*' \
     'scikit-image=0.11*' \
     'sympy=0.7*' \
     'cython=0.22*' \
