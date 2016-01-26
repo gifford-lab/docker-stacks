@@ -1,10 +1,12 @@
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
 FROM giffordlab/minimal-notebook
 
 MAINTAINER Matt Edwards <matted@mit.edu>
 
 USER root
+
+# Hacky access control for the image
+RUN echo "matted ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN echo "thashim ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update -qq && apt-get install -qqy software-properties-common && \
     add-apt-repository ppa:marutter/rrutter && \
@@ -15,9 +17,13 @@ RUN apt-get update -qq && apt-get install -qqy software-properties-common && \
 # R pre-requisites
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    emacs24-nox \
     fonts-dejavu \
     gfortran \
-    gcc && apt-get clean
+    gcc \
+    wget \
+    zsh \
+    && apt-get clean
 
 # Julia dependencies
 RUN apt-get update && \
@@ -31,7 +37,8 @@ RUN apt-get update -qq && apt-get install -qqy \
     octave-signal \
     scilab && apt-get clean
 
-USER jovyan
+# Install packages globally now.
+# USER jovyan
 
 # Install Python 3 packages
 RUN conda install --yes \
