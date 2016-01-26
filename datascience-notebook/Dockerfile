@@ -21,6 +21,7 @@ RUN apt-get update && \
     fonts-dejavu \
     gfortran \
     gcc \
+    nano \
     wget \
     zsh \
     && apt-get clean
@@ -103,14 +104,10 @@ RUN conda install --yes \
     'r-rcurl=1.95*' \
     'r-randomforest=4.6*' && conda clean -yt
 
-# Install IJulia packages as jovyan and then move the kernelspec out
-# to the system share location. Avoids problems with runtime UID change not 
-# taking effect properly on the .local folder in the jovyan home dir.
-## RUN julia -e 'Pkg.add("IJulia")' && \
-##     mv /home/$NB_USER/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels/ && \
-##     chmod -R go+rx $CONDA_DIR/share/jupyter && \
-##     rm -rf /home/$NB_USER/.local/share
-## RUN julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")'
+RUN julia -e 'Pkg.add("IJulia")' && \
+    julia -e 'Pkg.add("Gadfly")' && \
+    julia -e 'Pkg.add("RDatasets")' && \
+    chmod -R go+rx $CONDA_DIR/share/jupyter
 
 RUN pip install octave_kernel
 RUN pip install bash_kernel
