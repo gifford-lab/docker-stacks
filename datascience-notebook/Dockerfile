@@ -122,6 +122,8 @@ RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
     cd /tmp && git clone https://github.com/fchollet/keras.git --branch 0.3.1 && \
     cd keras && python setup.py install && rm -rf /tmp/keras
 
+ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32'
+
 RUN pip install octave_kernel
 RUN pip install bash_kernel
 RUN pip install scilab_kernel
