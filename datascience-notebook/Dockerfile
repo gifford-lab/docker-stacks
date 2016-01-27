@@ -109,6 +109,19 @@ RUN julia -e 'Pkg.add("IJulia")' && \
     julia -e 'Pkg.add("RDatasets")' && \
     chmod -R go+rx $CONDA_DIR/share/jupyter
 
+# Install deep learning packages with pip, for both Python versions.
+RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
+    cd /tmp && git clone https://github.com/fchollet/keras.git --branch 0.3.1 && \
+    cd keras && $CONDA_DIR/envs/python2/bin/python setup.py install && rm -rf /tmp/keras
+
+RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
+    pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
+    pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
+    cd /tmp && git clone https://github.com/fchollet/keras.git --branch 0.3.1 && \
+    cd keras && python setup.py install && rm -rf /tmp/keras
+
 RUN pip install octave_kernel
 RUN pip install bash_kernel
 RUN pip install scilab_kernel
