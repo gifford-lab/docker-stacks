@@ -7,6 +7,8 @@ USER root
 # Hacky access control for the image
 RUN echo "matted ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN echo "thashim ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN echo "haoyangz ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN echo "zeng ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update -qq && apt-get install -qqy software-properties-common && \
     add-apt-repository ppa:marutter/rrutter && \
