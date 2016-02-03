@@ -1,4 +1,4 @@
-# Build as jupyter/jupyterhub-singleuser
+# Build as giffordlab/jupyterhub-singleuser
 # Run with the DockerSpawner in JupyterHub
 
 FROM giffordlab/datascience-notebook
