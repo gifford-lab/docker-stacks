@@ -7,7 +7,6 @@ USER root
 # Hacky access control for the image
 RUN echo "matted ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN echo "thashim ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN echo "haoyangz ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN echo "zeng ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN apt-get update -qq && apt-get install -qqy software-properties-common && \
@@ -36,6 +35,7 @@ RUN apt-get update && \
 
 # Assorted other dependencies
 RUN apt-get update -qq && apt-get install -qqy \
+    graphviz \
     octave \
     octave-signal \
     scilab && apt-get clean
@@ -47,19 +47,20 @@ RUN apt-get update -qq && apt-get install -qqy \
 RUN conda install --yes \
     'ipywidgets=4.0*' \
     'pandas=0.17*' \
-    'matplotlib=1.4*' \
+    'matplotlib=1.5*' \
     'scipy=0.16*' \
-    'seaborn=0.6*' \
-    'scikit-learn=0.16*' \
+    'seaborn=0.7*' \
+    'scikit-learn=0.17*' \
     'scikit-image=0.11*' \
     'sympy=0.7*' \
-    'cython=0.22*' \
+    'cython=0.23*' \
     'patsy=0.4*' \
     'statsmodels=0.6*' \
     'cloudpickle=0.1*' \
     'dill=0.2*' \
-    'numba=0.22*' \
-    'bokeh=0.10*' \
+    'numba=0.23*' \
+    'bokeh=0.11*' \
+    biopython \
     && conda clean -yt
 
 # Install Python 2 packages
@@ -67,21 +68,22 @@ RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     'ipython=4.0*' \
     'ipywidgets=4.0*' \
     'pandas=0.17*' \
-    'matplotlib=1.4*' \
+    'matplotlib=1.5*' \
     'scipy=0.16*' \
-    'seaborn=0.6*' \
-    'scikit-learn=0.16*' \
+    'seaborn=0.7*' \
+    'scikit-learn=0.17*' \
     'pytables=3.2.2*' \
     'scikit-image=0.11*' \
     'sympy=0.7*' \
-    'cython=0.22*' \
+    'cython=0.23*' \
     'patsy=0.4*' \
     'statsmodels=0.6*' \
     'cloudpickle=0.1*' \
     'dill=0.2*' \
-    'numba=0.22*' \
-    'bokeh=0.10*' \
+    'numba=0.23*' \
+    'bokeh=0.11*' \
     pyzmq \
+    biopython \
     && conda clean -yt
 
 # R packages including IRKernel which gets installed globally.
@@ -112,17 +114,16 @@ RUN julia -e 'Pkg.add("IJulia")' && \
     chmod -R go+rx $CONDA_DIR/share/jupyter
 
 # Install deep learning packages with pip, for both Python versions.
-RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
+RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade pydot && \
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
-    cd /tmp && git clone https://github.com/fchollet/keras.git --branch 0.3.1 && \
-    cd keras && $CONDA_DIR/envs/python2/bin/python setup.py install && rm -rf /tmp/keras
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps keras
 
 RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
     pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
-    cd /tmp && git clone https://github.com/fchollet/keras.git --branch 0.3.1 && \
-    cd keras && python setup.py install && rm -rf /tmp/keras
+    pip install --upgrade --no-deps keras
 
 ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32'
 
