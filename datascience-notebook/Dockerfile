@@ -60,6 +60,7 @@ RUN conda install --yes \
     'dill=0.2*' \
     'numba=0.23*' \
     'bokeh=0.11*' \
+    'h5py=2.5*' \
     biopython \
     && conda clean -yt
 
@@ -82,8 +83,10 @@ RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     'dill=0.2*' \
     'numba=0.23*' \
     'bokeh=0.11*' \
+    'h5py=2.5*' \
     pyzmq \
     biopython \
+    pydot \
     && conda clean -yt
 
 # R packages including IRKernel which gets installed globally.
@@ -114,8 +117,7 @@ RUN julia -e 'Pkg.add("IJulia")' && \
     chmod -R go+rx $CONDA_DIR/share/jupyter
 
 # Install deep learning packages with pip, for both Python versions.
-RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade pydot && \
-    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
+RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps keras
