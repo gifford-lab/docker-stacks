@@ -45,10 +45,10 @@ RUN apt-get update -qq && apt-get install -qqy \
 
 # Install Python 3 packages
 RUN conda install --yes \
-    'ipywidgets=4.0*' \
+    'ipywidgets=4.1*' \
     'pandas=0.17*' \
     'matplotlib=1.5*' \
-    'scipy=0.16*' \
+    'scipy=0.17*' \
     'seaborn=0.7*' \
     'scikit-learn=0.17*' \
     'scikit-image=0.11*' \
@@ -66,11 +66,11 @@ RUN conda install --yes \
 
 # Install Python 2 packages
 RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
-    'ipython=4.0*' \
-    'ipywidgets=4.0*' \
+    'ipython=4.1*' \
+    'ipywidgets=4.1*' \
     'pandas=0.17*' \
     'matplotlib=1.5*' \
-    'scipy=0.16*' \
+    'scipy=0.17*' \
     'seaborn=0.7*' \
     'scikit-learn=0.17*' \
     'pytables=3.2.2*' \
@@ -127,7 +127,7 @@ RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
     pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     pip install --upgrade --no-deps keras
 
-ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32'
+ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32,lib.cnmem=1'
 
 RUN pip install octave_kernel
 RUN pip install bash_kernel
@@ -142,7 +142,7 @@ USER root
 # Install Python 2 kernel spec globally to avoid permission problems when NB_UID
 # switching at runtime.
 RUN $CONDA_DIR/envs/python2/bin/python \
-    $CONDA_DIR/envs/python2/bin/ipython \
+    $CONDA_DIR/envs/python2/bin/jupyter \
     kernelspec install-self
 
 USER jovyan
