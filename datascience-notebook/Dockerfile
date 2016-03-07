@@ -128,6 +128,9 @@ RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
     pip install --upgrade --no-deps keras
 
 ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32,lib.cnmem=1'
+RUN apt-get update \
+    && apt-get install -y libcudnn4 libcudnn4-dev \
+    && apt-get clean
 
 RUN pip install octave_kernel
 RUN pip install bash_kernel
