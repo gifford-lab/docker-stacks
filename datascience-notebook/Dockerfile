@@ -47,6 +47,7 @@ RUN apt-get update -qq && apt-get install -qqy \
 RUN conda install --yes \
     'ipywidgets=4.1*' \
     'pandas=0.17*' \
+    'numexpr=2.5*' \
     'matplotlib=1.5*' \
     'scipy=0.17*' \
     'seaborn=0.7*' \
@@ -69,6 +70,7 @@ RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     'ipython=4.1*' \
     'ipywidgets=4.1*' \
     'pandas=0.17*' \
+    'numexpr=2.5*' \
     'matplotlib=1.5*' \
     'scipy=0.17*' \
     'seaborn=0.7*' \
@@ -114,20 +116,22 @@ RUN conda install --yes \
 RUN julia -e 'Pkg.add("IJulia")' && \
     julia -e 'Pkg.add("Gadfly")' && \
     julia -e 'Pkg.add("RDatasets")' && \
+    julia -F -e 'Pkg.add("HDF5")' && \
     chmod -R go+rx $CONDA_DIR/share/jupyter
 
 # Install deep learning packages with pip, for both Python versions.
-RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
+RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano@rel-0.8.1 && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
-    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps keras
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/fchollet/keras@0.3.3
 
-RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano && \
+RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano@rel-0.8.1 && \
     pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
-    pip install --upgrade --no-deps keras
+    pip install --upgrade --no-deps git+https://github.com/fchollet/keras@0.3.3
 
 ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32,lib.cnmem=0'
+
 RUN apt-get update \
     && apt-get install -y libcudnn4 libcudnn4-dev \
     && apt-get clean
