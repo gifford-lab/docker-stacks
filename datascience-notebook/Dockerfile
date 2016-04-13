@@ -123,7 +123,8 @@ RUN julia -e 'Pkg.add("IJulia")' && \
 RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano@rel-0.8.1 && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
-    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/fchollet/keras@0.3.3
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/fchollet/keras@0.3.3 \
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.1.2
 
 RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano@rel-0.8.1 && \
     pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
