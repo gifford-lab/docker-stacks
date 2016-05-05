@@ -36,6 +36,7 @@ RUN apt-get update && \
 # Assorted other dependencies
 RUN apt-get update -qq && apt-get install -qqy \
     graphviz \
+    libgsl0-dev \
     octave \
     octave-signal \
     scilab && apt-get clean
