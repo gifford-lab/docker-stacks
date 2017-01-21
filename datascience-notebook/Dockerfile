@@ -30,8 +30,7 @@ RUN apt-get update && \
 # Julia dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    julia \
-    libnettle4 && apt-get clean
+    julia && apt-get clean
 
 # Assorted other dependencies
 RUN apt-get update -qq && apt-get install -qqy \
