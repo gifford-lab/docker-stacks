@@ -43,6 +43,8 @@ RUN apt-get update -qq && apt-get install -qqy \
 # Install packages globally now.
 # USER jovyan
 
+RUN conda config --set auto_update_conda False
+
 # Install Python 3 packages
 RUN conda install --yes \
     'ipywidgets=5.2*' \
@@ -52,16 +54,17 @@ RUN conda install --yes \
     'scipy=0.17*' \
     'seaborn=0.7*' \
     'scikit-learn=0.18*' \
-    'scikit-image=0.11*' \
+    'pytables=3.2.2*' \
     'sympy=1.0*' \
     'cython=0.23*' \
     'patsy=0.4*' \
     'statsmodels=0.6*' \
     'cloudpickle=0.1*' \
     'dill=0.2*' \
-    'numba=0.23*' \
+    'numba=0.30*' \
     'bokeh=0.11*' \
     'h5py=2.6*' \
+    'theano=0.8.2' \
     biopython \
     && conda clean -yt
 
@@ -76,16 +79,16 @@ RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     'seaborn=0.7*' \
     'scikit-learn=0.17*' \
     'pytables=3.2.2*' \
-    'scikit-image=0.11*' \
     'sympy=1.0*' \
     'cython=0.23*' \
     'patsy=0.4*' \
     'statsmodels=0.6*' \
     'cloudpickle=0.1*' \
     'dill=0.2*' \
-    'numba=0.23*' \
+    'numba=0.30*' \
     'bokeh=0.11*' \
     'h5py=2.6*' \
+    'theano=0.8.2' \
     pyzmq \
     biopython \
     pydot \
@@ -95,7 +98,7 @@ RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
 RUN conda config --add channels r
 RUN conda install --yes \
     'rpy2=2.8*' \
-    'r-base=3.2*' \
+    'r-base=3.3.2' \
     'r-irkernel=0.7*' \
     'r-plyr=1.8*' \
     'r-devtools=1.12*' \
@@ -120,23 +123,21 @@ RUN julia -e 'Pkg.add("IJulia")' && \
     chmod -R go+rx $CONDA_DIR/share/jupyter
 
 # Install deep learning packages with pip, for both Python versions.
-RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Theano/theano@rel-0.8.2 && \
-    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
-    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.6.0 && \
+RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/fchollet/keras@1.2.1 && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3
 
-RUN pip install --upgrade --no-deps git+https://github.com/Theano/theano@rel-0.8.2 && \
-    pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
-    pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.6.0 && \
+RUN pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
+    pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     pip install --upgrade --no-deps git+https://github.com/fchollet/keras@1.2.1 && \
     pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3
 
 ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32,lib.cnmem=0'
 
-RUN apt-get update \
-    && apt-get install -y libcudnn4 libcudnn4-dev \
-    && apt-get clean
+# RUN apt-get update \
+#     && apt-get install -y libcudnn4 libcudnn4-dev \
+#     && apt-get clean
 
 RUN pip install octave_kernel
 RUN pip install bash_kernel
