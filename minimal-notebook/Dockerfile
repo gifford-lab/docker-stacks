@@ -1,6 +1,6 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-FROM kaixhin/cuda-lasagne:8.0
+FROM giffordlab/cuda
 
 MAINTAINER Matt Edwards <matted@mit.edu>
 
