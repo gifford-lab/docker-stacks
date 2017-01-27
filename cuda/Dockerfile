@@ -1,4 +1,6 @@
-# From https://github.com/Kaixhin/dockerfiles/tree/master/cuda/cuda_v7.5, adapted for v8.0.
+# From https://github.com/Kaixhin/dockerfiles/tree/master/cuda/cuda_v7.5/Dockerfile
+# And https://github.com/Kaixhin/dockerfiles/blob/master/cudnn/cudnn_v7.5/Dockerfile
+# Adapted for CUDA 8.0
 FROM ubuntu:14.04
 MAINTAINER Kai Arulkumaran <design@kaixhin.com>
 
@@ -24,3 +26,17 @@ RUN cd /tmp && \
 # Add to path
 ENV PATH=/usr/local/cuda/bin:$PATH \
   LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+RUN ldconfig /usr/local/cuda/lib64
+
+# Install CUDA repo (needed for cuDNN)
+ENV CUDA_REPO_PKG=cuda-repo-ubuntu1404_8.0.44-1_amd64.deb
+
+RUN wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1404/x86_64/$CUDA_REPO_PKG && \
+  dpkg -i $CUDA_REPO_PKG
+
+# Install cuDNN v4
+ENV ML_REPO_PKG=nvidia-machine-learning-repo-ubuntu1404_4.0-2_amd64.deb
+
+RUN wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1404/x86_64/$ML_REPO_PKG && \
+  dpkg -i $ML_REPO_PKG && \
+  apt-get update && apt-get install -y libcudnn4 libcudnn4-dev
