@@ -19,15 +19,11 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     unzip \
     libsm6 \
     pandoc \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-fonts-extra \
-    texlive-fonts-recommended \
-    texlive-generic-recommended \
     sudo \
     locales \
     libxrender1 \
-    && apt-get clean
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
@@ -65,15 +61,13 @@ RUN cd /tmp && \
     wget --quiet --no-check-certificate https://repo.continuum.io/miniconda/Miniconda3-3.9.1-Linux-x86_64.sh && \
     echo "6c6b44acdd0bc4229377ee10d52c8ac6160c336d9cdd669db7371aa9344e1ac3 *Miniconda3-3.9.1-Linux-x86_64.sh" | sha256sum -c - && \
     /bin/bash Miniconda3-3.9.1-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-    rm Miniconda3-3.9.1-Linux-x86_64.sh && \
-    $CONDA_DIR/bin/conda install --yes conda=4.2.13 && \
-    conda config --set auto_update_conda False
+    rm Miniconda3-3.9.1-Linux-x86_64.sh
 
 # Install Jupyter notebook as jovyan
 RUN conda install --yes \
     'notebook=4.1*' \
     terminado \
-    && conda clean -yt
+    && conda clean -yat
 
 USER root
 
