@@ -7,7 +7,8 @@ MAINTAINER Kai Arulkumaran <design@kaixhin.com>
 # Install wget and build-essential
 RUN apt-get update && apt-get install -y \
   build-essential \
-  wget
+  wget \
+  curl
 
 # Change to the /tmp directory
 RUN cd /tmp && \
@@ -34,9 +35,18 @@ ENV CUDA_REPO_PKG=cuda-repo-ubuntu1404_8.0.44-1_amd64.deb
 RUN wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1404/x86_64/$CUDA_REPO_PKG && \
   dpkg -i $CUDA_REPO_PKG
 
-# Install cuDNN v4
-ENV ML_REPO_PKG=nvidia-machine-learning-repo-ubuntu1404_4.0-2_amd64.deb
 
-RUN wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1404/x86_64/$ML_REPO_PKG && \
-  dpkg -i $ML_REPO_PKG && \
-  apt-get update && apt-get install -y libcudnn4 libcudnn4-dev
+# Install cuDNN v5
+RUN CUDNN_DOWNLOAD_SUM=c10719b36f2dd6e9ddc63e3189affaa1a94d7d027e63b71c3f64d449ab0645ce && \
+    curl -fsSL http://developer.download.nvidia.com/compute/redist/cudnn/v5.1/cudnn-8.0-linux-x64-v5.1.tgz -O && \
+	    echo "$CUDNN_DOWNLOAD_SUM  cudnn-8.0-linux-x64-v5.1.tgz" | sha256sum -c --strict - && \
+		    tar -xzf cudnn-8.0-linux-x64-v5.1.tgz -C /usr/local && \
+			    rm cudnn-8.0-linux-x64-v5.1.tgz && \
+				    ldconfig
+
+# Install cuDNN v4
+#ENV ML_REPO_PKG=nvidia-machine-learning-repo-ubuntu1404_4.0-2_amd64.deb
+#
+#RUN wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1404/x86_64/$ML_REPO_PKG && \
+#  dpkg -i $ML_REPO_PKG && \
+#  apt-get update && apt-get install -y libcudnn4 libcudnn4-dev
