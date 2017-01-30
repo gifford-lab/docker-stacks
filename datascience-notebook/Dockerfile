@@ -13,37 +13,19 @@ RUN apt-get update -qq && apt-get install -qqy software-properties-common && \
     add-apt-repository ppa:marutter/rrutter && \
     add-apt-repository ppa:staticfloat/juliareleases && \
     add-apt-repository ppa:staticfloat/julia-deps && \
-    add-apt-repository ppa:octave/stable
-
-# R pre-requisites
-RUN apt-get update && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
     emacs24-nox \
     fonts-dejavu \
-    gfortran \
     gcc \
+    gfortran \
+    graphviz \
+    julia \
     nano \
     wget \
     zsh \
-    && apt-get clean
-
-# Julia dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    julia && apt-get clean
-
-# Assorted other dependencies
-RUN apt-get update -qq && apt-get install -qqy \
-    graphviz \
-    libgsl0-dev \
-    octave \
-    octave-signal \
-    scilab && apt-get clean
-
-# Install packages globally now.
-# USER jovyan
-
-RUN conda config --set auto_update_conda False
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Python 3 packages
 RUN conda install --yes \
@@ -66,7 +48,7 @@ RUN conda install --yes \
     'h5py=2.6*' \
     'theano=0.8.2' \
     biopython \
-    && conda clean -yt
+    && conda clean -yat
 
 # Install Python 2 packages
 RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
@@ -92,7 +74,7 @@ RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     pyzmq \
     biopython \
     pydot \
-    && conda clean -yt
+    && conda clean -yat
 
 # R packages including IRKernel which gets installed globally.
 RUN conda config --add channels r
@@ -111,14 +93,12 @@ RUN conda install --yes \
     'r-stringr=1.1*' \
     'r-rsqlite=1.1*' \
     'r-reshape2=1.4*' \
-    'r-nycflights13=0.2*' \
     'r-caret=6.0*' \
     'r-rcurl=1.95*' \
-    'r-randomforest=4.6*' && conda clean -yt
+    'r-randomforest=4.6*' && conda clean -yat
 
 RUN julia -e 'Pkg.add("IJulia")' && \
     julia -e 'Pkg.add("Gadfly")' && \
-    julia -e 'Pkg.add("RDatasets")' && \
     julia -F -e 'Pkg.add("HDF5")' && \
     chmod -R go+rx $CONDA_DIR/share/jupyter
 
@@ -135,24 +115,10 @@ RUN pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
 
 ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32,lib.cnmem=0'
 
-# RUN apt-get update \
-#     && apt-get install -y libcudnn4 libcudnn4-dev \
-#     && apt-get clean
-
-RUN pip install octave_kernel
-RUN pip install bash_kernel
-RUN pip install scilab_kernel
-
-RUN python -m octave_kernel.install
-RUN python -m bash_kernel.install
-RUN python -m scilab_kernel.install
-
-USER root
-
-# Install Python 2 kernel spec globally to avoid permission problems when NB_UID
-# switching at runtime.
-RUN $CONDA_DIR/envs/python2/bin/python \
-    $CONDA_DIR/envs/python2/bin/ipython \
-    kernelspec install-self
+RUN pip install bash_kernel && \
+    python -m bash_kernel.install && \
+    $CONDA_DIR/envs/python2/bin/python \
+        $CONDA_DIR/envs/python2/bin/ipython \
+        kernelspec install-self
 
 USER jovyan
