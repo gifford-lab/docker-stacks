@@ -58,14 +58,14 @@ RUN mkdir /home/$NB_USER/work && \
 # Install conda as jovyan
 RUN cd /tmp && \
     mkdir -p $CONDA_DIR && \
-    wget --quiet --no-check-certificate https://repo.continuum.io/miniconda/Miniconda3-3.9.1-Linux-x86_64.sh && \
-    echo "6c6b44acdd0bc4229377ee10d52c8ac6160c336d9cdd669db7371aa9344e1ac3 *Miniconda3-3.9.1-Linux-x86_64.sh" | sha256sum -c - && \
-    /bin/bash Miniconda3-3.9.1-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-    rm Miniconda3-3.9.1-Linux-x86_64.sh
+    wget --quiet --no-check-certificate https://repo.continuum.io/miniconda/Miniconda3-4.3.31-Linux-x86_64.sh && \
+    echo "5551f01f436b6409d467412c33e12ecc4f43b5e029290870f8fdeca403c274e6 *Miniconda3-4.3.31-Linux-x86_64.sh" | sha256sum -c - && \
+    /bin/bash Miniconda3-4.3.31-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
+    rm Miniconda3-4.3.31-Linux-x86_64.sh
 
 # Install Jupyter notebook as jovyan
 RUN conda install --yes \
-    'notebook=4.1*' \
+    'notebook=5.4*' \
     terminado \
     && conda clean -yat
 

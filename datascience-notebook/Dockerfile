@@ -30,51 +30,58 @@ RUN apt-get update -qq && apt-get install -qqy software-properties-common && \
 # Install Python 3 packages
 RUN conda install --yes \
     'ipywidgets=5.2*' \
-    'pandas=0.19*' \
+    'pandas=0.22*' \
     'numexpr=2.6*' \
-    'matplotlib=1.5*' \
-    'scipy=0.17*' \
+    'matplotlib=2.1*' \
+    'scipy=1.0*' \
     'seaborn=0.7*' \
-    'scikit-learn=0.18*' \
-    'pytables=3.2.2*' \
+    'scikit-learn=0.19*' \
+    'pytables=3.4.2*' \
     'sympy=1.0*' \
-    'cython=0.23*' \
+    'cython=0.27*' \
     'patsy=0.4*' \
-    'statsmodels=0.6*' \
-    'cloudpickle=0.1*' \
+    'statsmodels=0.8*' \
+    'cloudpickle=0.5*' \
     'dill=0.2*' \
-    'numba=0.30*' \
-    'bokeh=0.11*' \
-    'h5py=2.6*' \
-    'theano=0.8.2' \
+    'numba=0.36*' \
+    'bokeh=0.12*' \
+    'h5py=2.7*' \
+    'theano=1.0.1' \
     biopython \
     && conda clean -yat
 
+
+RUN pip --no-cache-dir install tensorflow-gpu
+
+
 # Install Python 2 packages
 RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
-    'ipython=4.2*' \
+    'ipython=5.4*' \
     'ipywidgets=5.2*' \
-    'pandas=0.19*' \
+    'pandas=0.22*' \
     'numexpr=2.6*' \
-    'matplotlib=1.5*' \
-    'scipy=0.17*' \
+    'matplotlib=2.1*' \
+    'scipy=1.0*' \
     'seaborn=0.7*' \
-    'scikit-learn=0.17*' \
-    'pytables=3.2.2*' \
+    'scikit-learn=0.19*' \
+    'pytables=3.4.2*' \
     'sympy=1.0*' \
-    'cython=0.23*' \
+    'cython=0.27*' \
     'patsy=0.4*' \
-    'statsmodels=0.6*' \
-    'cloudpickle=0.1*' \
+    'statsmodels=0.8*' \
+    'cloudpickle=0.5*' \
     'dill=0.2*' \
-    'numba=0.30*' \
-    'bokeh=0.11*' \
-    'h5py=2.6*' \
+    'numba=0.36*' \
+    'bokeh=0.12*' \
+    'h5py=2.7*' \
     'theano=0.8.2' \
     pyzmq \
     biopython \
     pydot \
+	pillow \ 
     && conda clean -yat
+
+RUN	$CONDA_DIR/envs/python2/bin/pip --no-cache-dir install tensorflow-gpu
 
 # R packages including IRKernel which gets installed globally.
 RUN conda config --add channels r
@@ -106,16 +113,16 @@ RUN julia -e 'Pkg.add("IJulia")' && \
 RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/fchollet/keras@1.2.1 && \
-    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3 && \
-	$CONDA_DIR/envs/python2/bin/pip install tensorflow-gpu && \
-	$CONDA_DIR/envs/python2/bin/pip install pytorch torchvision cuda90 -c pytorch
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3
+
+RUN conda install -p $CONDA_DIR/envs/python2 pytorch torchvision cuda90 -c pytorch
 
 RUN pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     pip install --upgrade --no-deps git+https://github.com/fchollet/keras@1.2.1 && \
-    pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3 && \
-	pip install tensorflow-gpu && \
-	pip install pytorch torchvision cuda90 -c pytorch
+    pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3
+
+RUN conda install -p $CONDA_DIR pytorch torchvision cuda90 -c pytorch
 
 ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32,lib.cnmem=0'
 ENV CUDA_HOME=/usr/local/cuda
