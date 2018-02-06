@@ -106,14 +106,20 @@ RUN julia -e 'Pkg.add("IJulia")' && \
 RUN $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/fchollet/keras@1.2.1 && \
-    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3
+    $CONDA_DIR/envs/python2/bin/pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3 && \
+	$CONDA_DIR/envs/python2/bin/pip install tensorflow-gpu && \
+	$CONDA_DIR/envs/python2/bin/pip install pytorch torchvision cuda90 -c pytorch
 
 RUN pip install --upgrade --no-deps git+https://github.com/Lasagne/lasagne && \
     pip install --upgrade --no-deps git+https://github.com/dnouri/nolearn@0.5 && \
     pip install --upgrade --no-deps git+https://github.com/fchollet/keras@1.2.1 && \
-    pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3
+    pip install --upgrade --no-deps git+https://github.com/maxpumperla/hyperas@0.3 && \
+	pip install tensorflow-gpu && \
+	pip install pytorch torchvision cuda90 -c pytorch
 
 ENV THEANO_FLAGS='cuda.root=/usr/local/cuda,device=gpu,floatX=float32,lib.cnmem=0'
+ENV CUDA_HOME=/usr/local/cuda
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64
 
 RUN pip install bash_kernel && \
     python -m bash_kernel.install && \
